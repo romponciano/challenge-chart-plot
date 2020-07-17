@@ -10,7 +10,7 @@ export default class BottomBar extends React.Component {
         {(cxt) => {
           return (
             <nav className="navbar navbar-expand fixed-bottom bar">
-              <button type="button" className="btn btn-primary" onClick={() => { cxt.setJSONData(); }}>GENERATE CHART</button>
+              <button type="button" className="btn btn-primary" onClick={() => { cxt.setJSONData(this.props); }}>GENERATE CHART</button>
             </nav>
           )
         }}

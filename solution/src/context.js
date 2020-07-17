@@ -9,13 +9,14 @@ class DataProvider extends React.Component {
     codeEditor: undefined
   }
 
-  setJSONData = () => {
+  setJSONData = (props) => {
     let data = this.state.codeEditor.getValue();
-    console.log(data);
     this.setState(() => {
       return {
         json: data
       }
+    }, () => {
+      props.callbackGenerateGraphClick();
     })
   }
 
@@ -27,12 +28,17 @@ class DataProvider extends React.Component {
     });
   }
 
+  getCodeMirror = () => {
+    return this.state.codeEditor;
+  }
+
   render() {
     return (
       <DATA_CONTEXT.Provider value={{
         ...this.state,
         setJSONData: this.setJSONData,
-        setEditor: this.setEditor
+        setEditor: this.setEditor,
+        getCodeMirror: this.getCodeMirror
       }}>{this.props.children}
       </DATA_CONTEXT.Provider>
     )

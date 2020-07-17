@@ -10,8 +10,7 @@ function App() {
     <React.Fragment>
       <TopBar></TopBar>
       <InputJSON />
-      <LineGraph />
-      <BottomBar />
+      <LineGraph />      
     </React.Fragment>
   );
 }
