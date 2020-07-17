@@ -8,17 +8,17 @@ export default class InputTab extends React.Component {
       <React.Fragment>
         <nav>
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" id="ui-tab" data-toggle="tab" href="#" role="tab" aria-controls="ui-content" aria-selected="true"
-              onClick={() => changeTab('json', 'ui')}
-            >Via UI</a>
             <a class="nav-item nav-link" id="json-tab" data-toggle="tab" href="#" role="tab" aria-controls="json-content" aria-selected="false"
               onClick={() => changeTab('ui', 'json')}
             >Via JSON</a>
+            <a class="nav-item nav-link active" id="ui-tab" data-toggle="tab" href="#" role="tab" aria-controls="ui-content" aria-selected="true"
+              onClick={() => changeTab('json', 'ui')}
+            >Via UI</a>
           </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade" id="json-content" role="tabpanel" aria-labelledby="nav-json-tab"><InputJSON></InputJSON></div>
           <div class="tab-pane fade show active" id="ui-content" role="tabpanel" aria-labelledby="nav-ui-tab"><InputUI></InputUI></div>
-          <div class="tab-pane fade" id="json-content" role="tabpanel" aria-labelledby="nav-json-tab"><InputJSON></InputJSON></div>
         </div>
       </React.Fragment>
     );
