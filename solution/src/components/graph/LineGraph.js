@@ -1,7 +1,7 @@
 import React from 'react';
 import { DATA_CONTEXT } from '../../context';
 import BottomBar from '../bar/BottomBar';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, TYPE_STOP } from '../../Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from '../../Constants';
 
 export default class LineGraph extends React.Component {
 
@@ -23,7 +23,7 @@ export default class LineGraph extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div id="chartParent" className="w-100">
+        <div id="chartParent" className="bg-danger test">
           <div id="linechart" />
         </div>
         <BottomBar callbackGenerateGraphClick = {this.generateGraphClickCallback} />
@@ -58,6 +58,7 @@ function drawChart(jsonArray) {
     var options = {
       width: chartWidth,
       height: chartHeight,
+      chartArea: {left:"3%", top:"7%", right:"16%", width:"100%", height:"80%"},
       vAxis: { textPosition: 'none' },
       hAxis: { gridlines: { color: 'transparent' }, format: 'mm:ss' },
       pointsVisible: true
@@ -89,13 +90,13 @@ function jsonArray2OrganizedArray(jsonArr) {
     let json = jsonArr[i];
     let type = json[FIELD_TYPE];
     // if find a new start, then reset all previous job
-    if(type == TYPE_START) {
+    if(type === TYPE_START) {
       out = new Map();
     }
-    else if(type == TYPE_SPAN) {
+    else if(type === TYPE_SPAN) {
 
     }
-    else if(type == TYPE_DATA) {
+    else if(type === TYPE_DATA) {
       let ts = json[FIELD_TIMESTAMP];
       if(out.has(ts)) {
         out.get(ts).push(generateDataObject(json));
@@ -113,10 +114,11 @@ function jsonArray2OrganizedArray(jsonArr) {
  * Create aux object used inside organized array
  */
 function generateDataObject(json) {
-  let aux = new Object();
-  aux.pair = json[FIELD_OS] + ' ' + json[FIELD_BROWSER];
-  aux.minVal = json[FIELD_MIN];
-  aux.maxVal = json[FIELD_MAX];
+  let aux = {
+    pair: json[FIELD_OS] + ' ' + json[FIELD_BROWSER],
+    minVal: json[FIELD_MIN],
+    maxVal: json[FIELD_MAX]
+  }
   return aux;
 }
 

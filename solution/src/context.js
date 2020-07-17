@@ -1,5 +1,5 @@
 import React from 'react';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, TYPE_STOP } from './Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from './Constants';
 
 const DATA_CONTEXT = React.createContext();
 const DATA_CONSUMER = DATA_CONTEXT.Consumer;
@@ -47,7 +47,7 @@ class DataProvider extends React.Component {
         txt = txt.replace(FIELD_MAX +":", '"'+FIELD_MAX +'":');      
       }
       // replace all ' to "
-      txt = txt.replace(/\'/g, '"');
+      txt = txt.replace(/'/g, '"');
       // if has any text, convert line to json
       if(txt && txt.length > 0) {
         jsonArr.push(JSON.parse(txt));

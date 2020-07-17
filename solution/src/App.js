@@ -1,8 +1,6 @@
 import React from 'react';
-import './App.css';
 import TopBar from './components/bar/TopBar';
 import InputJSON from './components/inputtab/InputJSON';
-import BottomBar from './components/bar/BottomBar';
 import LineGraph from './components/graph/LineGraph';
 
 function App() {

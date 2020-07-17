@@ -1,6 +1,4 @@
 import React from 'react';
-import { DATA_CONSUMER } from '../../context';
-import CodeMirror from 'codemirror/lib/codemirror.js';
 
 export default class BottomBar extends React.Component {
 
