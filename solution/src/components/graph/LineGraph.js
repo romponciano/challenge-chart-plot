@@ -51,18 +51,29 @@ function drawChart(jsonArray) {
 
   // when google finish load, plot the graph
   google.charts.setOnLoadCallback(function () {    
-    var data = new google.visualization.arrayToDataTable(chartArray);
-    // set parameters
+    let data;
+    // setup graph options
+    // set parameters for correct data
     var chartWidth = document.getElementById('chartParent').width;
     var chartHeight = document.getElementById('chartParent').height;
-    var options = {
+    let options = {
       width: chartWidth,
       height: chartHeight,
       chartArea: {left:"3%", top:"7%", right:"16%", width:"100%", height:"80%"},
       vAxis: { textPosition: 'none' },
       hAxis: { gridlines: { color: 'transparent' }, format: 'mm:ss' },
-      pointsVisible: true
+      pointsVisible: true,
+      interpolateNulls: true
     };
+    // create blank chart if no data
+    if (!chartArray) {
+      // wont work whithout this
+      data = google.visualization.arrayToDataTable([[{f: 'Date', type: 'date'}, {f: 'Line', type: 'number'}]]);
+      data.addRow([new Date(), 0]);
+      options.series = { 0: { color: 'transparent' } };
+    } else {
+      data = new google.visualization.arrayToDataTable(chartArray);
+    }
     // instance chart and draw
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));
     chart.draw(data, options);
@@ -140,9 +151,9 @@ function convertOrganizedArray2ArrayDataTableStruct(arr) {
       if(!header.includes(minPair)) header.push(minPair);
       let maxPair = value[i].pair + ' max';
       if(!header.includes(maxPair)) header.push(maxPair);
-      let minVal = new Date(value[i].minVal*1000);
+      let minVal = (value[i].minVal);
       aux.push(minVal);      
-      let maxVal = new Date(value[i].maxVal*1000);
+      let maxVal = (value[i].maxVal);
       aux.push(maxVal);
     }
     out.push(aux); // add line to out
