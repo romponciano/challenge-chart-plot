@@ -15,7 +15,7 @@ export default class InputJSON extends React.Component {
 
   render() {
     return(
-      <textarea id="eventsJson"></textarea>
+      <textarea id="eventsJson" className="stylishScrollBar" />
     )
   }
 }
@@ -29,7 +29,7 @@ function transformTextAreaInCode() {
     theme: "3024-day",
     autoFocus: true
   });
-  editor.setSize(null, 300);
+  editor.setSize(null, 240);
   editor.refresh();
   editor.focus();
 }
