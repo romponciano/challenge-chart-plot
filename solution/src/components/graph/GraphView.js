@@ -1,9 +1,9 @@
 import React from 'react';
 import { DATA_CONTEXT } from '../../context';
-import BottomBar from '../bar/BottomBar';
+import GraphControlBar from './GraphControlBar';
 import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from '../../Constants';
 
-export default class LineGraph extends React.Component {
+export default class GraphView extends React.Component {
 
   componentDidMount() {
     drawChart(undefined);
@@ -26,14 +26,14 @@ export default class LineGraph extends React.Component {
         <div id="chartParent" className="bg-danger test">
           <div id="linechart" />
         </div>
-        <BottomBar callbackGenerateGraphClick = {this.generateGraphClickCallback} />
+        <GraphControlBar callbackGenerateGraphClick = {this.generateGraphClickCallback} />
       </React.Fragment>
     );
   }
 
 }
 
-LineGraph.contextType = DATA_CONTEXT;
+GraphView.contextType = DATA_CONTEXT;
 
 /**
  * Method to draw the chart.

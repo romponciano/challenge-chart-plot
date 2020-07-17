@@ -1,14 +1,15 @@
 import React from 'react';
-import TopBar from './components/bar/TopBar';
-import InputJSON from './components/inputtab/InputJSON';
-import LineGraph from './components/graph/LineGraph';
+import TopBar from './components/topbar/TopBar';
+import InputJSON from './components/inputdata/InputJSON';
+import GraphView from './components/graph/GraphView';
+import './App.css';
 
 function App() {
   return (
     <React.Fragment>
-      <TopBar></TopBar>
+      <TopBar />
       <InputJSON />
-      <LineGraph />      
+      <GraphView />      
     </React.Fragment>
   );
 }
