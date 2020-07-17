@@ -1,6 +1,7 @@
 import React from 'react';
 import { DATA_CONTEXT } from '../../context';
 import BottomBar from '../bar/BottomBar';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, TYPE_STOP } from '../../Constants';
 
 export default class LineGraph extends React.Component {
 
@@ -8,10 +9,17 @@ export default class LineGraph extends React.Component {
     drawChart(undefined);
   }
 
+  /**
+   * Method to execute when user click in generate graph button.
+   * This method will get code editor text, convert it and
+   * plot the new graph
+   */
   generateGraphClickCallback = () => {
     drawChart(this.context.getJSONArray());
   }
 
+  // If BottomBar button only exists to generate graph, then it
+  // should be inside LineGraph component
   render() {
     return (
       <React.Fragment>
@@ -23,23 +31,28 @@ export default class LineGraph extends React.Component {
     );
   }
 
-
 }
 
 LineGraph.contextType = DATA_CONTEXT;
 
+/**
+ * Method to draw the chart.
+ * More info: https://developers.google.com/chart/interactive/docs/gallery/linechart
+ */
 function drawChart(jsonArray) {
   const google = window.google;
   google.charts.load('current', { packages: ['corechart'] });
 
-  let chartArray = undefined
+  // convert json array to chart struct array
+  let chartArray = undefined;
   if(jsonArray) {
     chartArray = jsonArry2DataTableStruct(jsonArray);
   }
 
+  // when google finish load, plot the graph
   google.charts.setOnLoadCallback(function () {    
     var data = new google.visualization.arrayToDataTable(chartArray);
-
+    // set parameters
     var chartWidth = document.getElementById('chartParent').width;
     var chartHeight = document.getElementById('chartParent').height;
     var options = {
@@ -49,44 +62,46 @@ function drawChart(jsonArray) {
       hAxis: { gridlines: { color: 'transparent' }, format: 'mm:ss' },
       pointsVisible: true
     };
-
+    // instance chart and draw
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-
     chart.draw(data, options);
   });
 }
 
+/**
+ * Function to convert JSON Array to DataTable Scrut.
+ * This function only exists because the process takes 
+ * 2 steps
+ */
 function jsonArry2DataTableStruct(jsonArr) {
   let rows = jsonArray2OrganizedArray(jsonArr);
   return convertOrganizedArray2ArrayDataTableStruct(rows);
 }
 
+/**
+ * Convert JSON Array to a more readable array. It's
+ * important in order to facilitate the conversion
+ * to DataTable array struct
+ */
 function jsonArray2OrganizedArray(jsonArr) {
   let out = new Map();
   for(let i=0; i < jsonArr.length; i++) {
     let json = jsonArr[i];
-    let type = json['type'];
-    if(type == 'start') {
+    let type = json[FIELD_TYPE];
+    // if find a new start, then reset all previous job
+    if(type == TYPE_START) {
       out = new Map();
     }
-    else if(type == 'span') {
+    else if(type == TYPE_SPAN) {
 
     }
-    else if(type == 'data') {
-      let ts = json['timestamp'];
+    else if(type == TYPE_DATA) {
+      let ts = json[FIELD_TIMESTAMP];
       if(out.has(ts)) {
-        let aux = new Object();
-        aux.pair = json['os'] + ' ' + json['browser'];
-        aux.minVal = json['min_response_time'];
-        aux.maxVal = json['max_response_time'];
-        out.get(ts).push(aux);
+        out.get(ts).push(generateDataObject(json));
       } else {
         let params = [];
-        let aux = new Object();
-        aux.pair = json['os'] + ' ' + json['browser'];
-        aux.minVal = json['min_response_time'];
-        aux.maxVal = json['max_response_time'];
-        params.push(aux);
+        params.push(generateDataObject(json));
         out.set(ts, params);
       }
     }
@@ -94,14 +109,30 @@ function jsonArray2OrganizedArray(jsonArr) {
   return out;
 }
 
+/**
+ * Create aux object used inside organized array
+ */
+function generateDataObject(json) {
+  let aux = new Object();
+  aux.pair = json[FIELD_OS] + ' ' + json[FIELD_BROWSER];
+  aux.minVal = json[FIELD_MIN];
+  aux.maxVal = json[FIELD_MAX];
+  return aux;
+}
+
+/**
+ * Convert readable array to DataTable struct
+ * https://developers.google.com/chart/interactive/docs/datatables_dataviews
+ */
 function convertOrganizedArray2ArrayDataTableStruct(arr) {
   let out = [];
-  let header = [];
-  header.push('ts');
-  arr = new Map([...arr.entries()].sort());
+  let header = [];  
+  header.push('ts'); // add the x name
+  arr = new Map([...arr.entries()].sort()); // order timestamps to get smaller first
   for(let [key, value] of arr.entries()) {
     let aux = [];
-    aux.push(new Date(parseInt(key)));
+    aux.push(new Date(parseInt(key))); // add the x val
+    // generate all other cols
     for(let i=0; i < value.length; i++) {
       let minPair = value[i].pair + ' min';
       if(!header.includes(minPair)) header.push(minPair);
@@ -112,8 +143,9 @@ function convertOrganizedArray2ArrayDataTableStruct(arr) {
       let maxVal = new Date(value[i].maxVal*1000);
       aux.push(maxVal);
     }
-    out.push(aux);
+    out.push(aux); // add line to out
   }
+  // return DataTable struct array with header in the begin
   let firstLine = []
   firstLine.push(header);
   return firstLine.concat(out);

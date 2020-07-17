@@ -6,15 +6,9 @@ export default class BottomBar extends React.Component {
 
   render() {
     return (
-      <DATA_CONSUMER>
-        {(cxt) => {
-          return (
-            <nav className="navbar navbar-expand fixed-bottom bar">
-              <button type="button" className="btn btn-primary" onClick={() => { cxt.setJSONData(this.props); }}>GENERATE CHART</button>
-            </nav>
-          )
-        }}
-      </DATA_CONSUMER>
+      <nav className="navbar navbar-expand fixed-bottom bar">
+        <button type="button" className="btn btn-primary" onClick={() => { this.props.callbackGenerateGraphClick() }}>GENERATE CHART</button>
+      </nav>
     );
   }
 }
