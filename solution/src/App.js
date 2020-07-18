@@ -7,9 +7,9 @@ import './App.css';
 function App() {
   return (
     <React.Fragment>
-      <TopBar />
-      <InputJSON />
-      <GraphView />      
+      <TopBar data-testid="topBarApp" />
+      <InputJSON data-testid="inputJSONApp" />
+      <GraphView data-testid="graphViewApp" />      
     </React.Fragment>
   );
 }
