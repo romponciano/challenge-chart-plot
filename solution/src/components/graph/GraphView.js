@@ -1,12 +1,24 @@
 import React from 'react';
 import { DATA_CONTEXT } from '../../context';
 import GraphControlBar from './GraphControlBar';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from '../../Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, LOADING_CHART } from '../../Constants';
+import { Chart } from 'react-google-charts';
 
 export default class GraphView extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      chartData: undefined
+    }
+  }
+
   componentDidMount() {
-    drawChart(undefined);
+    this.setState(() => {
+      return {
+        chartData: getDataTableStruct(undefined)
+      }
+    });
   }
 
   /**
@@ -15,7 +27,11 @@ export default class GraphView extends React.Component {
    * plot the new graph
    */
   generateGraphClickCallback = () => {
-    drawChart(this.context.getJSONArray());
+    this.setState(() => {
+      return {
+        chartData: getDataTableStruct(this.context.getJSONArray())
+      }
+    });
   }
 
   // If BottomBar button only exists to generate graph, then it
@@ -23,10 +39,19 @@ export default class GraphView extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div id="chartParent" className="bg-danger test">
-          <div id="linechart" />
-        </div>
-        <GraphControlBar callbackGenerateGraphClick = {this.generateGraphClickCallback} />
+        <Chart
+          chartType="LineChart"
+          loader={<div>{LOADING_CHART}</div>}
+          options={{
+            chartArea: { left: "3%", top: "7%", right: "16%", width: "100%", height: "80%" },
+            vAxis: { textPosition: 'none' },
+            hAxis: { gridlines: { color: 'transparent' }, format: 'mm:ss' },
+            pointsVisible: true,
+            interpolateNulls: true
+          }}
+          data={this.state.chartData}
+        />
+        <GraphControlBar callbackGenerateGraphClick={this.generateGraphClickCallback} />
       </React.Fragment>
     );
   }
@@ -39,45 +64,17 @@ GraphView.contextType = DATA_CONTEXT;
  * Method to draw the chart.
  * More info: https://developers.google.com/chart/interactive/docs/gallery/linechart
  */
-function drawChart(jsonArray) {
-  const google = window.google;
-  google.charts.load('current', { packages: ['corechart'] });
-
+export function getDataTableStruct(jsonArray) {
   // convert json array to chart struct array
   let chartArray = undefined;
-  if(jsonArray) {
+  if (jsonArray) {
     chartArray = jsonArry2DataTableStruct(jsonArray);
   }
-
-  // when google finish load, plot the graph
-  google.charts.setOnLoadCallback(function () {    
-    let data;
-    // setup graph options
-    // set parameters for correct data
-    var chartWidth = document.getElementById('chartParent').width;
-    var chartHeight = document.getElementById('chartParent').height;
-    let options = {
-      width: chartWidth,
-      height: chartHeight,
-      chartArea: {left:"3%", top:"7%", right:"16%", width:"100%", height:"80%"},
-      vAxis: { textPosition: 'none' },
-      hAxis: { gridlines: { color: 'transparent' }, format: 'mm:ss' },
-      pointsVisible: true,
-      interpolateNulls: true
-    };
-    // create blank chart if no data
-    if (!chartArray) {
-      // wont work whithout this
-      data = google.visualization.arrayToDataTable([[{f: 'Date', type: 'date'}, {f: 'Line', type: 'number'}]]);
-      data.addRow([new Date(), 0]);
-      options.series = { 0: { color: 'transparent' } };
-    } else {
-      data = new google.visualization.arrayToDataTable(chartArray);
-    }
-    // instance chart and draw
-    var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-    chart.draw(data, options);
-  });
+  if (!chartArray) {
+    // wont work whithout this
+    return [[{ f: 'Date', type: 'date' }, { f: 'Line', type: 'number' }]];
+  }
+  return chartArray;
 }
 
 /**
@@ -97,19 +94,19 @@ function jsonArry2DataTableStruct(jsonArr) {
  */
 function jsonArray2OrganizedArray(jsonArr) {
   let out = new Map();
-  for(let i=0; i < jsonArr.length; i++) {
+  for (let i = 0; i < jsonArr.length; i++) {
     let json = jsonArr[i];
     let type = json[FIELD_TYPE];
     // if find a new start, then reset all previous job
-    if(type === TYPE_START) {
+    if (type === TYPE_START) {
       out = new Map();
     }
-    else if(type === TYPE_SPAN) {
+    else if (type === TYPE_SPAN) {
 
     }
-    else if(type === TYPE_DATA) {
+    else if (type === TYPE_DATA) {
       let ts = json[FIELD_TIMESTAMP];
-      if(out.has(ts)) {
+      if (out.has(ts)) {
         out.get(ts).push(generateDataObject(json));
       } else {
         let params = [];
@@ -139,20 +136,20 @@ function generateDataObject(json) {
  */
 function convertOrganizedArray2ArrayDataTableStruct(arr) {
   let out = [];
-  let header = [];  
+  let header = [];
   header.push('ts'); // add the x name
   arr = new Map([...arr.entries()].sort()); // order timestamps to get smaller first
-  for(let [key, value] of arr.entries()) {
+  for (let [key, value] of arr.entries()) {
     let aux = [];
     aux.push(new Date(parseInt(key))); // add the x val
     // generate all other cols
-    for(let i=0; i < value.length; i++) {
+    for (let i = 0; i < value.length; i++) {
       let minPair = value[i].pair + ' min';
-      if(!header.includes(minPair)) header.push(minPair);
+      if (!header.includes(minPair)) header.push(minPair);
       let maxPair = value[i].pair + ' max';
-      if(!header.includes(maxPair)) header.push(maxPair);
+      if (!header.includes(maxPair)) header.push(maxPair);
       let minVal = (value[i].minVal);
-      aux.push(minVal);      
+      aux.push(minVal);
       let maxVal = (value[i].maxVal);
       aux.push(maxVal);
     }

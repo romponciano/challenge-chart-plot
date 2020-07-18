@@ -1,7 +1,7 @@
 import React from 'react';
 import InputJSON from './InputJSON';
 import { DATA_CONTEXT } from '../../context';
-import { configure, shallow } from 'enzyme';
+import { configure, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { UnControlled } from 'react-codemirror2';
 
@@ -26,8 +26,7 @@ describe('tests about basic render components', () => {
 
 describe('tests about UnControlled CodeMirror component', () => {
   /**
-   * Test if component have uncontrolled codemirror
-   * with correct options
+   * Test if component have uncontrolled codemirror with correct options
    */
   test('should have correct options', () => {
     let wrapper = shallow(<InputJSON />, { context: DATA_CONTEXT });
@@ -39,14 +38,4 @@ describe('tests about UnControlled CodeMirror component', () => {
     expect(wrapper.find({ options: correctOpts })).toHaveLength(1);
   });
 
-  /**
-   * TODO: Back to finish it
-   */
-  test.skip('should have correct onChange property', () => {
-    //const spy = jest.spyOn(Counter.prototype, "onClickHandler");
-    let wrapper = shallow(<InputJSON />, { context: DATA_CONTEXT });
-    wrapper.find(UnControlled).simulate('change');
-    //expect(spy).toBeCalled();
-  });
-
-})
+});

@@ -15,3 +15,6 @@ export const TYPE_START = 'start';
 export const TYPE_SPAN = 'span';
 export const TYPE_DATA = 'data';
 export const TYPE_STOP = 'stop';
+
+export const LOADING_CHART = 'Loading chart';
+export const GENERATE_CHART = 'GENERATE CHART';
