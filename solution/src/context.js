@@ -56,10 +56,12 @@ class DataProvider extends React.Component {
     return jsonArr;
   }  
 
+  // using Object.assign instead of spread syntax (...this.state)
+  // because Edge doest not support spread syntax
   render() {
     return (
       <DATA_CONTEXT.Provider value={{
-        ...this.state,
+        state: Object.assign(this.state),
         setJSONData: this.setJSONData,
         setEditor: this.setEditor,
         getJSONArray: this.getJSONArray
