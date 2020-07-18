@@ -30,21 +30,21 @@ class DataProvider extends React.Component {
       // trim all whitespaces
       txt = txt.replace(/\s/g,'');
       // place "" in fields
-      txt = txt.replace(FIELD_TYPE+":", '"'+FIELD_TYPE+'":');
-      txt = txt.replace(FIELD_TIMESTAMP +":", '"'+FIELD_TIMESTAMP +'":');
+      txt = this.insertDoubleQuoteInsideField(txt, FIELD_TYPE);
+      txt = this.insertDoubleQuoteInsideField(txt, FIELD_TIMESTAMP);
       if(txt.includes(TYPE_START)) {
-        txt = txt.replace(FIELD_SELECT +":", '"'+FIELD_SELECT +'":');
-        txt = txt.replace(FIELD_GROUP +":", '"'+FIELD_GROUP +'":');
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_SELECT);
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_GROUP);
       }
       else if(txt.includes(TYPE_SPAN)) {
-        txt = txt.replace(FIELD_BEGIN +":", '"'+FIELD_BEGIN +'":');
-        txt = txt.replace(FIELD_END +":", '"'+FIELD_END +'":');
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_BEGIN);
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_END);
       }
       else if(txt.includes(TYPE_DATA)) {  
-        txt = txt.replace(FIELD_OS +":", '"'+FIELD_OS +'":');
-        txt = txt.replace(FIELD_BROWSER +":", '"'+FIELD_BROWSER +'":');
-        txt = txt.replace(FIELD_MIN +":", '"'+FIELD_MIN +'":');
-        txt = txt.replace(FIELD_MAX +":", '"'+FIELD_MAX +'":');      
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_OS);
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_BROWSER);
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_MIN);
+        txt = this.insertDoubleQuoteInsideField(txt, FIELD_MAX);
       }
       // replace all ' to "
       txt = txt.replace(/'/g, '"');
@@ -54,7 +54,11 @@ class DataProvider extends React.Component {
       }
     })
     return jsonArr;
-  }  
+  }
+
+  insertDoubleQuoteInsideField = (text, field) => {
+    return text.replace(field+":", '"'+field+'":');
+  }
 
   // using Object.assign instead of spread syntax (...this.state)
   // because Edge doest not support spread syntax
