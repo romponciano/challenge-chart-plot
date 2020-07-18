@@ -23,6 +23,9 @@ class DataProvider extends React.Component {
    */
   getJSONArray = () => {
     let jsonArr = [];
+    if(!this.state.codeEditor) {
+      return undefined;
+    }
     // iterate through code editor lines
     this.state.codeEditor.eachLine(line => {
       // get line val as string
