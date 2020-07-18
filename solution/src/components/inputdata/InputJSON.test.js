@@ -1,7 +1,7 @@
 import React from 'react';
 import InputJSON from './InputJSON';
-import { DATA_CONTEXT } from '../../context';
-import { configure, shallow, mount } from 'enzyme';
+import { DATA_CONTEXT } from '../context';
+import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { UnControlled } from 'react-codemirror2';
 
@@ -38,4 +38,17 @@ describe('tests about UnControlled CodeMirror component', () => {
     expect(wrapper.find({ options: correctOpts })).toHaveLength(1);
   });
 
+  /**
+   * TODO: back to finish
+   */
+  test.skip('should set editor correctly', () => {
+    let spy = jest.fn();
+    let wrapper = shallow(
+      <DATA_CONTEXT.Provider>
+        <UnControlled onChange={spy} />            
+      </DATA_CONTEXT.Provider>
+    );
+    wrapper.props().onChange;
+    expect(spy).toHaveBeenCalledTimes(1);
+  })
 });

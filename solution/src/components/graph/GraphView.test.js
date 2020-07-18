@@ -7,7 +7,7 @@ import GraphControlBar from './GraphControlBar';
 import { LOADING_CHART } from '../../Constants';
 import { cleanup } from '@testing-library/react';
 import { getDataTableStruct } from './GraphView';
-import { DATA_CONTEXT, DataProvider } from '../../context';
+import { DATA_CONTEXT } from '../context';
 
 configure({adapter: new Adapter()});
 

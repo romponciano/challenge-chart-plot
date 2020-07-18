@@ -1,5 +1,5 @@
 import React from 'react';
-import { DATA_CONTEXT } from '../../context';
+import { DATA_CONTEXT } from '../context';
 // codemirror css
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/3024-day.css';
@@ -19,7 +19,7 @@ export default class InputJSON extends React.Component {
           theme: '3024-day',
           lineNumbers: true
         }}
-        onChange={(editor, data, value) => { this.context.setEditor(editor); }}
+        onChange={(editor, data, value) => { this.context.setEditor(value); }}
        />
     )
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from './Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_SELECT, FIELD_GROUP, FIELD_BEGIN, FIELD_END, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA } from '../Constants';
 
 const DATA_CONTEXT = React.createContext();
 const DATA_CONSUMER = DATA_CONTEXT.Consumer;
@@ -26,10 +26,11 @@ class DataProvider extends React.Component {
     if(!this.state.codeEditor) {
       return undefined;
     }
-    // iterate through code editor lines
-    this.state.codeEditor.eachLine(line => {
+    // get lines and split into array
+    let lines = this.state.codeEditor.match(/[^\r\n]+/g);
+    for(let i=0; i<lines.length; i++) {
       // get line val as string
-      let txt = line.text;
+      let txt = lines[i];
       // trim all whitespaces
       txt = txt.replace(/\s/g,'');
       // place "" in fields
@@ -55,7 +56,7 @@ class DataProvider extends React.Component {
       if(txt && txt.length > 0) {
         jsonArr.push(JSON.parse(txt));
       }
-    })
+    };
     return jsonArr;
   }
 

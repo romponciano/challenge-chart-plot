@@ -4,7 +4,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import GraphControlBar from './GraphControlBar';
 import { GENERATE_CHART } from '../../Constants';
 import { cleanup } from '@testing-library/react';
-import GraphView from './GraphView';
 
 configure({adapter: new Adapter()})
 

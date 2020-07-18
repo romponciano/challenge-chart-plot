@@ -1,7 +1,7 @@
 import React from 'react';
-import { DATA_CONTEXT } from '../../context';
+import { DATA_CONTEXT } from '../context';
 import GraphControlBar from './GraphControlBar';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, LOADING_CHART, FIELD_BEGIN, FIELD_END, TYPE_STOP, ERROR_ONLY_ONE_SPAN, ERROR_ONLY_ONE_SPAN_END, ERROR_ONLY_ONE_SPAN_BEGIN, ERROR_DATA_BEFORE_SPAN } from '../../Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, LOADING_CHART, FIELD_BEGIN, FIELD_END, TYPE_STOP, ERROR_ONLY_ONE_SPAN_END, ERROR_ONLY_ONE_SPAN_BEGIN, ERROR_DATA_BEFORE_SPAN } from '../../Constants';
 import { Chart } from 'react-google-charts';
 
 export default class GraphView extends React.Component {
