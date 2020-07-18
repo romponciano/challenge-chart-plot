@@ -1,7 +1,7 @@
 import React from 'react';
 import { DATA_CONTEXT } from '../../context';
 import GraphControlBar from './GraphControlBar';
-import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, LOADING_CHART, FIELD_BEGIN, FIELD_END, TYPE_STOP } from '../../Constants';
+import { FIELD_TYPE, FIELD_TIMESTAMP, FIELD_OS, FIELD_BROWSER, FIELD_MIN, FIELD_MAX, TYPE_START, TYPE_SPAN, TYPE_DATA, LOADING_CHART, FIELD_BEGIN, FIELD_END, TYPE_STOP, ERROR_ONLY_ONE_SPAN, ERROR_ONLY_ONE_SPAN_END, ERROR_ONLY_ONE_SPAN_BEGIN, ERROR_DATA_BEFORE_SPAN } from '../../Constants';
 import { Chart } from 'react-google-charts';
 
 export default class GraphView extends React.Component {
@@ -119,12 +119,12 @@ function jsonArray2OrganizedArray(jsonArr) {
     // else show error because span already defined for this start
     else if (type === TYPE_SPAN && !alreadyStop) {
       if(begin) {
-        showError('Should not have two events of type SPAN to set begin');
+        showError(ERROR_ONLY_ONE_SPAN_BEGIN);
         return undefined;
       }
       begin = json[FIELD_BEGIN];
       if(end) {
-        showError('Should not have two events of type SPAN to set end');
+        showError(ERROR_ONLY_ONE_SPAN_END);
         return undefined;
       }
       end = json[FIELD_END];
@@ -133,7 +133,7 @@ function jsonArray2OrganizedArray(jsonArr) {
     else if (type === TYPE_DATA && !alreadyStop) {
       let ts = json[FIELD_TIMESTAMP];
       if(!begin || !end) {
-        showError('Should insert SPAN event with \'begin\' and \'end\', first of DATA event');
+        showError(ERROR_DATA_BEFORE_SPAN);
         return undefined;
       }
       // only add if timestamp between being and end

@@ -99,22 +99,79 @@ describe('tests about Chart parameters', () => {
   });
 });
 
+// The globals are in setupTests.js
 describe('test GraphView functions which convert json/arrays', () => {
   /**
    * Test if the pass of an undefined to the main convert method will 
    * return simple chart array data to plot blank graph
    */
   test('should return simple chart array data', () => {
-    let correctEmptyArrayGraph = [[{ f: 'Date', type: 'date' }, { f: 'Line', type: 'number' }]];
-    expect(getDataTableStruct(undefined)).toEqual(correctEmptyArrayGraph);
+    expect(getDataTableStruct(undefined)).toEqual(global.correctEmptyArrayGraph);
   });
 
   /**
    * Test if it returns correct chart array if pass the
-   * example in README.
-   * The globals are in setupTests.js
+   * example in README.   
    */
   test('should return correct chart arrat in example', () => {    
     expect(getDataTableStruct(global.exampleJsonArray)).toEqual(global.exampleChartArray);
+  });
+
+  /**
+   * Test if it returns correct if insert array with extra lines
+   * without new start
+   */
+  test('should ignore extra lines after stop if dont have new start', () => {
+    expect(getDataTableStruct(global.jsonArrayWithExtraLinesAfterStop))
+      .toEqual(global.correctChartArrayWithExtraLinesAfterStop);
+  });
+
+  /**
+   * Test if returns correct if insert array with new start
+   */
+  test('should restart arr if new start', () => {
+    expect(getDataTableStruct(global.jsonArrayWithNewStart)).toEqual(global.correctChartArrayWithNewStart);
+  });
+
+  /**
+   * Test if returns empty array if json array have more
+   * than 1 span to set begin without a new start
+   */
+  test('should return empty array if more than 1 span to set begin', () => {
+    expect(getDataTableStruct(global.jsonArrayMoreThanOneSpanBegin)).toEqual(global.correctEmptyArrayGraph);
+  });
+
+  /**
+   * Test if returns empty array if json array have more
+   * than 1 span to set end without a new start
+   */
+  test('should return empty array if more than 1 span to set end', () => {
+    expect(getDataTableStruct(global.jsonArrayMoreThanOneSpanEnd)).toEqual(global.correctEmptyArrayGraph);
+  });
+
+  /**
+   * Test if returns empty array if json array have data
+   * before span
+   */
+  test('should return empty array if more data befory span', () => {
+    expect(getDataTableStruct(global.jsonArrayDataBeforeSpan)).toEqual(global.correctEmptyArrayGraph);
+  });
+
+  /**
+   * Test if it returns correct chart array ignoring pair with timestamp
+   * greather than end defined by span
+   */
+  test('should return correct chart array ignoring greather timestamp data', () => {
+    expect(getDataTableStruct(global.jsonArrayWithTimestampGreatherThanEnd))
+      .toEqual(global.correctChartArrayIgnoringOutsideBoundary);
+  });
+
+  /**
+   * Test if it returns correct chart array ignoring pair with timestamp
+   * lower than begin defined by span
+   */
+  test('should return correct chart array ignoring lower timestamp data', () => {
+    expect(getDataTableStruct(global.jsonArrayWithTimestampLowerThanBegin))
+      .toEqual(global.correctChartArrayIgnoringOutsideBoundary);
   });
 })
