@@ -22,3 +22,4 @@ export const GENERATE_CHART = 'GENERATE CHART';
 export const ERROR_ONLY_ONE_SPAN_BEGIN = 'Should not have two events of type SPAN to set begin';
 export const ERROR_ONLY_ONE_SPAN_END = 'Should not have two events of type SPAN to set end';
 export const ERROR_DATA_BEFORE_SPAN = 'Should insert SPAN event with \'begin\' and \'end\', first of DATA event';
+export const ERROR_JSON_PARSE = 'Bad JSON inside code editor';

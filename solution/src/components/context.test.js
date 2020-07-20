@@ -45,4 +45,13 @@ describe('tests about functions', () => {
   test('should return undefined if codeEditor undefined', () => {
     expect(instance.getJSONArray()).toEqual(undefined);
   });
+
+  /**
+   * Test if getJSONArray return undefined if bad JSON
+   */
+  test('should return undefined if codeEditor have bad json', () => {
+    window.alert = () => {};
+    wrapper.setState({codeEditor: global.badJsonEditorCode});
+    expect(instance.getJSONArray()).toEqual(undefined);
+  })
 });
