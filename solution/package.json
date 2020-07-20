@@ -39,5 +39,12 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "react-codemirror2": "^7.2.1",
     "react-google-charts": "^3.0.15"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js",
+      "!src/serviceWorker.js"
+    ]
   }
 }
