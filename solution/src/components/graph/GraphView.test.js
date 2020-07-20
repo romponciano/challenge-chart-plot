@@ -101,6 +101,9 @@ describe('tests about Chart parameters', () => {
 
 // The globals are in setupTests.js
 describe('test GraphView functions which convert json/arrays', () => {
+  beforeEach(() => {
+    window.alert = () => {};
+  })
   /**
    * Test if the pass of an undefined to the main convert method will 
    * return simple chart array data to plot blank graph
